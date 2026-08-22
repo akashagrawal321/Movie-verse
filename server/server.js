@@ -36,14 +36,21 @@ app.use('/api/admin', require('./routes/adminRoutes'));
 
 // Root Endpoint Health Check
 app.get('/', async (req, res) => {
+    let connError = null;
     if (mongoose.connection.readyState !== 1) {
-        await connectDB();
+        try {
+            const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/movieverse_pro';
+            await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 5000 });
+        } catch (err) {
+            connError = err.message;
+        }
     }
     res.status(200).json({
         success: true,
         message: 'MovieVerse Pro Backend REST API is operational 🚀',
         dbState: mongoose.connection.readyState === 1 ? 'Connected' : 'Connecting/Disconnected',
-        dbError: global.lastDbError || null
+        dbError: connError || global.lastDbError || null,
+        hasMongoUriEnv: !!process.env.MONGO_URI
     });
 });
 
