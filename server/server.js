@@ -6,6 +6,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
@@ -17,8 +18,11 @@ connectDB();
 
 const app = express();
 
-// Core Middlewares
-app.use(cors());
+// Core Middlewares - Allow CORS from any origin
+app.use(cors({
+    origin: '*',
+    credentials: true
+}));
 app.use(express.json());
 
 // API REST Routes
@@ -34,7 +38,8 @@ app.use('/api/admin', require('./routes/adminRoutes'));
 app.get('/', (req, res) => {
     res.status(200).json({
         success: true,
-        message: 'MovieVerse Pro Backend REST API is operational 🚀'
+        message: 'MovieVerse Pro Backend REST API is operational 🚀',
+        dbState: mongoose.connection.readyState === 1 ? 'Connected' : 'Connecting/Disconnected'
     });
 });
 
@@ -45,5 +50,5 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`🚀 MovieVerse Pro Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+    console.log(`🚀 MovieVerse Pro Server running on port ${PORT}`);
 });
