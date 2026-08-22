@@ -1,0 +1,182 @@
+/* MovieCard CSS with Responsive Touch Support */
+
+.movie-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+    height: 100%;
+    width: 100%;
+}
+
+.movie-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-md);
+}
+
+.poster-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    background: var(--bg-dark);
+}
+
+.poster-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.poster-fallback-card {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1c2436 0%, #0b0e14 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    text-align: center;
+    gap: 0.6rem;
+    border: 1px dashed rgba(229, 9, 20, 0.4);
+}
+
+.fallback-card-icon {
+    font-size: 2.5rem;
+}
+
+.fallback-card-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.fallback-card-lang {
+    font-size: 0.78rem;
+    color: var(--accent-red);
+    background: rgba(229, 9, 20, 0.15);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+}
+
+.movie-card:hover .poster-image {
+    transform: scale(1.06);
+}
+
+/* Rating Badge */
+.card-rating-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(11, 14, 20, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    color: var(--accent-gold);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: clamp(0.72rem, 1.8vw, 0.78rem);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    z-index: 2;
+}
+
+.card-rating-badge .votes {
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.7rem;
+}
+
+/* Format Row */
+.card-format-row {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    z-index: 2;
+}
+
+/* Hover Overlay */
+.card-hover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(11, 14, 20, 0.95) 25%, rgba(11, 14, 20, 0.4) 65%, transparent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 1.25rem 0.85rem;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 3;
+}
+
+.movie-card:hover .card-hover-overlay {
+    opacity: 1;
+}
+
+/* Info Section */
+.movie-info {
+    padding: 0.85rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+}
+
+.movie-title {
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-title a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.movie-title a:hover {
+    color: var(--accent-red);
+}
+
+.movie-genre {
+    font-size: clamp(0.75rem, 1.5vw, 0.8rem);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-language {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+@media (max-width: 480px) {
+    .card-hover-overlay {
+        opacity: 0.9;
+        background: linear-gradient(to top, rgba(11, 14, 20, 0.9) 30%, transparent);
+        padding: 0.75rem;
+    }
+
+    .card-hover-overlay .btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        min-height: 38px;
+    }
+}

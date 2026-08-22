@@ -1,0 +1,343 @@
+/* MovieDetailsPage CSS with Responsive Breakpoints */
+
+.movie-details-container {
+    width: 100%;
+}
+
+.details-hero-backdrop {
+    width: 100%;
+    padding: clamp(2rem, 5vw, 4rem) 1.25rem;
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.details-hero-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+}
+
+.details-poster-box {
+    width: clamp(180px, 30vw, 280px);
+    aspect-ratio: 2 / 3;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border-hover);
+    box-shadow: var(--shadow-lg);
+    flex-shrink: 0;
+}
+
+.details-poster-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.details-info-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 700px;
+}
+
+.details-title {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 900;
+    line-height: 1.15;
+}
+
+.details-rating-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.votes-count {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.rate-now-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.4rem 0.8rem;
+    min-height: 38px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.details-tags-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.tag-box {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.tag-label {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.tag-val {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.details-meta-specs {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    flex-wrap: wrap;
+}
+
+.details-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-lg {
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+    min-height: 48px;
+}
+
+/* Body Content */
+.details-body {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.details-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.details-section h2 {
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.synopsis-text {
+    color: var(--text-secondary);
+    font-size: clamp(0.95rem, 2vw, 1.05rem);
+    line-height: 1.7;
+}
+
+/* Cast Cards Grid - Sleek Text Badge Style without Face Images */
+.cast-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(180px, 30vw, 240px), 1fr));
+    gap: 1.25rem;
+}
+
+.text-badge-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem 1.1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+    text-align: left;
+}
+
+.text-badge-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.cast-badge-icon {
+    font-size: 1.4rem;
+    padding: 0.4rem 0.6rem;
+    background: rgba(229, 9, 20, 0.15);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cast-badge-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.cast-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.cast-role {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}
+
+.details-toast-banner {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 3000;
+    background: var(--accent-red);
+    color: #ffffff;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-size: 0.92rem;
+    font-weight: 700;
+    box-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
+    animation: fadeIn 0.3s ease;
+}
+
+.btn-icon-action {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.85rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.btn-icon-action:hover,
+.btn-icon-action.active {
+    background: rgba(229, 9, 20, 0.2);
+    border-color: var(--accent-red);
+    color: var(--accent-red);
+}
+
+.format-pill {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.format-pill:hover,
+.format-pill.selected {
+    background: var(--accent-red);
+    color: #ffffff;
+    border-color: var(--accent-red);
+}
+
+.format-pill.imax {
+    border-color: rgba(236, 201, 75, 0.5);
+    color: var(--accent-gold);
+}
+
+.reviews-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.review-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.review-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.review-author {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.review-score {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    background: rgba(236, 201, 75, 0.12);
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-sm);
+}
+
+.review-comment {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.review-date {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+    .details-hero-content {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .details-poster-box {
+        width: 180px;
+    }
+
+    .details-actions {
+        justify-content: center;
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .details-actions .btn,
+    .details-actions .btn-icon-action {
+        width: 100%;
+        justify-content: center;
+    }
+}

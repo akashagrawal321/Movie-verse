@@ -1,0 +1,168 @@
+/* HomePage CSS with Responsive Media Queries */
+
+.home-page-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.25rem 1rem 3rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.home-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.section-title {
+    font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+    font-weight: 800;
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: clamp(0.82rem, 2vw, 0.95rem);
+    margin-top: 0.2rem;
+}
+
+.see-all-link {
+    color: var(--accent-red);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.see-all-link:hover {
+    color: var(--accent-red-hover);
+    transform: translateX(4px);
+}
+
+/* Genre Chips Row */
+.genre-chips-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.6rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.genre-chips-row::-webkit-scrollbar {
+    display: none;
+}
+
+/* Promo Banner Card */
+.promo-banner-section {
+    width: 100%;
+}
+
+.promo-banner-card {
+    background: linear-gradient(135deg, #1c2331, #111622);
+    border: 1px solid var(--border-hover);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 4vw, 3.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+    gap: 1.5rem;
+}
+
+.promo-content {
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.promo-badge {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.8rem;
+    color: var(--accent-red);
+    letter-spacing: 1px;
+}
+
+.promo-content h2 {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    line-height: 1.25;
+}
+
+.promo-content p {
+    color: var(--text-secondary);
+    font-size: clamp(0.88rem, 2vw, 1rem);
+}
+
+.promo-graphic {
+    font-size: clamp(4rem, 8vw, 6rem);
+    user-select: none;
+}
+
+/* Cinema Chains Grid */
+.cinema-chains-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(140px, 40vw, 240px), 1fr));
+    gap: 1rem;
+}
+
+.cinema-chain-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.cinema-chain-card:hover {
+    border-color: var(--accent-red);
+    transform: translateY(-4px);
+}
+
+.chain-logo {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: var(--accent-red);
+}
+
+.chain-name {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .promo-banner-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .promo-content {
+        align-items: center;
+    }
+
+    .promo-graphic {
+        display: none;
+    }
+}

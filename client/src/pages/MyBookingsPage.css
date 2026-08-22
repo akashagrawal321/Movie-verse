@@ -1,0 +1,163 @@
+/* MyBookingsPage CSS with Responsive Media Queries */
+
+.my-bookings-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 4vw, 2.5rem) 1.25rem 4rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.my-bookings-header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 900;
+}
+
+.my-bookings-header p {
+    color: var(--text-secondary);
+    font-size: clamp(0.88rem, 2vw, 0.95rem);
+    margin-top: 0.2rem;
+}
+
+.bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.user-booking-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: clamp(1rem, 3vw, 1.5rem);
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 1.8rem);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.user-booking-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-md);
+}
+
+.booking-card-poster {
+    width: clamp(65px, 15vw, 75px);
+    height: clamp(90px, 20vw, 105px);
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.booking-card-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.booking-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.card-top-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.status-badge {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.72rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.5px;
+}
+
+.status-badge.confirmed {
+    background: rgba(40, 167, 69, 0.15);
+    border: 1px solid rgba(40, 167, 69, 0.3);
+    color: #28a745;
+}
+
+.booking-id-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+}
+
+.booking-movie-title {
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    font-weight: 800;
+}
+
+.booking-theatre-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.booking-specs-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 0.3rem;
+    flex-wrap: wrap;
+}
+
+.spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.spec-lbl {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.spec-val {
+    font-size: 0.88rem;
+    color: var(--text-primary);
+}
+
+.seats-highlight {
+    color: var(--accent-red);
+    font-weight: 800;
+}
+
+.price-highlight {
+    color: var(--accent-gold);
+    font-weight: 800;
+}
+
+.bookings-empty {
+    padding: 4rem 1.25rem;
+    text-align: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.empty-icon {
+    font-size: 3.5rem;
+}
+
+@media (max-width: 600px) {
+    .user-booking-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

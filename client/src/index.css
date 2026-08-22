@@ -1,0 +1,213 @@
+/* ==========================================================================
+   MOVIEVERSE - BOOKMYSHOW INSPIRED PREMIUM DESIGN SYSTEM (PURE CSS)
+   ========================================================================== */
+
+:root {
+  /* Color Tokens */
+  --bg-dark: #0b0e14;
+  --bg-card: #151a24;
+  --bg-card-hover: #1c2331;
+  --bg-glass: rgba(15, 20, 30, 0.82);
+  --bg-glass-card: rgba(255, 255, 255, 0.04);
+
+  --accent-red: #f84464;
+  /* BookMyShow signature vibrant red */
+  --accent-red-hover: #ff2d52;
+  --accent-red-glow: rgba(248, 68, 100, 0.4);
+
+  --accent-blue: #00d2ff;
+  --accent-gold: #ffc107;
+  --accent-gold-glow: rgba(255, 193, 7, 0.3);
+
+  --text-primary: #ffffff;
+  --text-secondary: #a0a7b5;
+  --text-muted: #656d7e;
+
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(248, 68, 100, 0.4);
+
+  /* Typography */
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Effects */
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.7);
+  --shadow-red-glow: 0 0 25px var(--accent-red-glow);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+  --radius-full: 9999px;
+
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-red);
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Button System */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.6rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-red), #d62b48);
+  color: #ffffff;
+  box-shadow: 0 4px 18px var(--accent-red-glow);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--accent-red-hover), var(--accent-red));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px var(--accent-red-glow);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--accent-red);
+}
+
+.btn-outline:hover {
+  background: var(--accent-red);
+  color: #ffffff;
+  box-shadow: 0 0 15px var(--accent-red-glow);
+}
+
+/* Format Pills (2D, 3D, IMAX 3D, 4DX) */
+.format-pill {
+  font-size: 0.7rem;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  padding: 0.18rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.format-pill.imax {
+  background: rgba(0, 210, 255, 0.15);
+  border-color: rgba(0, 210, 255, 0.4);
+  color: var(--accent-blue);
+}
+
+.format-pill.premium {
+  background: rgba(248, 68, 100, 0.15);
+  border-color: rgba(248, 68, 100, 0.4);
+  color: var(--accent-red);
+}
+
+/* Rating Badge */
+.rating-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: rgba(15, 20, 30, 0.9);
+  border: 1px solid rgba(255, 193, 7, 0.35);
+  color: var(--accent-gold);
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+/* Filter Chip */
+.filter-chip {
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filter-chip.active,
+.filter-chip:hover {
+  background: var(--accent-red);
+  color: #ffffff;
+  border-color: var(--accent-red);
+  box-shadow: 0 4px 12px var(--accent-red-glow);
+}

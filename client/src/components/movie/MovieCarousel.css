@@ -1,0 +1,69 @@
+/* MovieCarousel CSS with Responsive Touch Scroll */
+.carousel-section {
+    margin: 2rem 0;
+}
+
+.carousel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    gap: 0.5rem;
+}
+
+.carousel-header h2 {
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    font-weight: 800;
+}
+
+.carousel-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.carousel-arrow {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    min-height: 38px;
+    min-width: 38px;
+}
+
+.carousel-arrow:hover {
+    background: var(--accent-red);
+    border-color: var(--accent-red);
+}
+
+.carousel-track {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-item {
+    scroll-snap-align: start;
+    flex: 0 0 clamp(140px, 40vw, 220px);
+}
+
+@media (max-width: 480px) {
+    .carousel-controls {
+        display: none;
+    }
+}

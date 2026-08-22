@@ -1,0 +1,58 @@
+/* AdminShowsPage CSS with Responsive Media Queries */
+
+.admin-shows-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 4vw, 2.5rem) 1.25rem 4rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.admin-shows-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 1.75rem;
+}
+
+.schedule-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.schedule-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.schedule-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.shows-list-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.shows-list-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.empty-shows {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 900px) {
+    .admin-shows-grid {
+        grid-template-columns: 1fr;
+    }
+}
