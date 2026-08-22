@@ -35,7 +35,10 @@ app.use('/api/reviews', require('./routes/reviewRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 
 // Root Endpoint Health Check
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
+    if (mongoose.connection.readyState !== 1) {
+        await connectDB();
+    }
     res.status(200).json({
         success: true,
         message: 'MovieVerse Pro Backend REST API is operational 🚀',

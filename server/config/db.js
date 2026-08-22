@@ -11,9 +11,13 @@ mongoose.set('bufferCommands', false);
 global.lastDbError = null;
 
 const connectDB = async () => {
+  if (mongoose.connection.readyState === 1) {
+    return;
+  }
+
   try {
     const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/movieverse_pro';
-    console.log(`📡 Connecting to MongoDB...`);
+    console.log(`📡 Attempting MongoDB connection to host...`);
     const conn = await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 5000
     });
