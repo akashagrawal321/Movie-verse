@@ -39,7 +39,8 @@ app.get('/', (req, res) => {
     res.status(200).json({
         success: true,
         message: 'MovieVerse Pro Backend REST API is operational 🚀',
-        dbState: mongoose.connection.readyState === 1 ? 'Connected' : 'Connecting/Disconnected'
+        dbState: mongoose.connection.readyState === 1 ? 'Connected' : 'Connecting/Disconnected',
+        dbError: global.lastDbError || null
     });
 });
 
