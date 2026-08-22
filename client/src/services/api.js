@@ -1,18 +1,21 @@
 /**
  * @file api.js
  * @description Frontend API Service Layer for Axios HTTP Requests
- * 
- * INTERVIEW CONCEPTS COVERED:
- * 1. Axios Interceptor Pattern:
- *    Automatically attaches `Authorization: Bearer <token>` to all HTTP requests.
- * 2. Service Layer Abstraction:
- *    Encapsulates backend URL endpoint configuration cleanly inside services directory.
  */
 
 import axios from 'axios';
 
+// Get API base URL from env vars or fallback to production Render backend URL
+const getBaseURL = () => {
+    const envUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL;
+    if (envUrl) {
+        return envUrl.endsWith('/') ? envUrl.slice(0, -1) : envUrl;
+    }
+    return 'https://movie-verse-ac9k.onrender.com/api';
+};
+
 const API = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+    baseURL: getBaseURL(),
     headers: {
         'Content-Type': 'application/json'
     }

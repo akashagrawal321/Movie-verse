@@ -102,7 +102,7 @@ export const AuthProvider = ({ children }) => {
             return { success: false, message: res.data?.message || 'Registration failed' };
         } catch (error) {
             console.error('[Register Error]:', error);
-            const message = error.response?.data?.message || 'Registration failed. Email may already be in use.';
+            const message = error.response?.data?.message || (error.message.includes('Network Error') ? 'Server connection error. Please try again in a few seconds as free cloud servers take a moment to wake up.' : 'Registration failed. Please try again.');
             return { success: false, message };
         }
     };
