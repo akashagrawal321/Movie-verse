@@ -1,17 +1,6 @@
 /**
  * @file Show.js
  * @description Mongoose Show Schema definition for movie showtimes and pricing
- * 
- * WHY IT EXISTS:
- * In a real-world ticketing engine (e.g. BookMyShow), a "Show" acts as the central pivot entity connecting 
- * a specific Movie to a specific Theatre venue auditorium (Screen) at a specific date and time slot.
- * 
- * HOW IT WORKS:
- * Holds 3 relational `ObjectId` references (`movieId`, `theatreId`, `screenId`) alongside `showDate`, `showTime`, and `ticketPrice`.
- * 
- * WHY THIS APPROACH IS USED IN REAL MERN APPLICATIONS:
- * Normalized relational references prevent data duplication. If a movie's poster or duration changes, 
- * updating the single Movie document updates all corresponding shows automatically when populated.
  */
 
 const mongoose = require('mongoose');
@@ -44,6 +33,10 @@ const showSchema = new mongoose.Schema(
         ticketPrice: {
             type: Number,
             required: [true, 'Ticket price is required']
+        },
+        bookedSeats: {
+            type: [String],
+            default: []
         }
     },
     {
@@ -51,7 +44,8 @@ const showSchema = new mongoose.Schema(
     }
 );
 
-// Compound Index for fast lookup of showtimes by movie and date
+// Compound Index for fast lookup of showtimes by movie, date, and theatre slot
 showSchema.index({ movieId: 1, showDate: 1 });
+showSchema.index({ theatreId: 1, showDate: 1, showTime: 1 });
 
 module.exports = mongoose.model('Show', showSchema);

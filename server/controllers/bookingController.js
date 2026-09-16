@@ -1,17 +1,55 @@
 /**
  * @file bookingController.js
- * @description Backend Booking Controller handling full ticket booking lifecycle
+ * @description Backend Booking Controller with Single-Threaded Mutex Concurrency Lock
  * 
  * INTERVIEW CONCEPTS COVERED:
- * 1. Double-Booking Conflict Prevention (Concurrency Control):
- *    Uses MongoDB `$in` operator to prevent race condition seat collisions.
- * 2. ObjectId Validation & Custom Reference Lookup:
- *    Supports both standard MongoDB ObjectId and custom reference strings (e.g. `MV-360207`).
+ * 1. Single-Threaded Concurrency Control (Mutex Lock Queue):
+ *    Ensures that for any given cinema showtime slot (`showId`), booking transactions execute strictly 
+ *    one-at-a-time (sequentially). Eliminates race conditions and double-booking collisions.
+ * 2. Atomic Database Operations:
+ *    Uses MongoDB atomic `$addToSet` with `$nin` array collision detection to ensure seat reservation exclusivity.
  */
 
 const mongoose = require('mongoose');
 const Booking = require('../models/Booking');
 const Show = require('../models/Show');
+
+// In-Memory Mutex Lock Queue Map per show slot
+const showBookingLocks = new Map();
+
+/**
+ * Executes a callback function inside a single-threaded queue for a specific show slot
+ * @param {string} showId 
+ * @param {Function} taskFn 
+ * @returns {Promise<any>}
+ */
+const executeInShowLock = async (showId, taskFn) => {
+    const lockKey = String(showId);
+
+    // Acquire or initialize Promise chain lock for this show
+    const currentLock = showBookingLocks.get(lockKey) || Promise.resolve();
+
+    let release;
+    const nextLock = new Promise((resolve) => {
+        release = resolve;
+    });
+
+    // Chain the next task to run only after the current lock completes
+    showBookingLocks.set(lockKey, currentLock.then(() => nextLock));
+
+    try {
+        // Wait for previous transactions on this show slot to finish
+        await currentLock;
+        // Execute the current booking transaction exclusively
+        return await taskFn();
+    } finally {
+        // Release the lock for the next queued request in line
+        release();
+        if (showBookingLocks.get(lockKey) === nextLock) {
+            showBookingLocks.delete(lockKey);
+        }
+    }
+};
 
 /**
  * @route   GET /api/bookings/show/:showId/booked-seats
@@ -30,15 +68,22 @@ const getBookedSeatsByShow = async (req, res, next) => {
             });
         }
 
-        const bookings = await Booking.find({ showId }).select('selectedSeats');
-        const bookedSeats = bookings.reduce((acc, booking) => {
-            return acc.concat(booking.selectedSeats || []);
-        }, []);
+        // Fetch from Show document
+        const show = await Show.findById(showId).select('bookedSeats');
+        let bookedSeats = show && show.bookedSeats ? show.bookedSeats : [];
+
+        // Fallback: also check Booking collection for legacy data
+        if (bookedSeats.length === 0) {
+            const bookings = await Booking.find({ showId }).select('selectedSeats');
+            bookedSeats = bookings.reduce((acc, booking) => {
+                return acc.concat(booking.selectedSeats || []);
+            }, []);
+        }
 
         res.status(200).json({
             success: true,
             showId,
-            bookedSeats
+            bookedSeats: [...new Set(bookedSeats)]
         });
     } catch (error) {
         next(error);
@@ -47,7 +92,7 @@ const getBookedSeatsByShow = async (req, res, next) => {
 
 /**
  * @route   POST /api/bookings
- * @desc    Confirm & Store a new movie ticket booking in MongoDB
+ * @desc    Confirm & Store a new movie ticket booking with single-threaded concurrency lock
  * @access  Private (Authenticated User Required)
  */
 const createBooking = async (req, res, next) => {
@@ -69,58 +114,95 @@ const createBooking = async (req, res, next) => {
             });
         }
 
-        let verifiedTotal = totalAmount;
-        if (mongoose.Types.ObjectId.isValid(showId)) {
-            const show = await Show.findById(showId);
-            if (show) {
+        const lockKey = mongoose.Types.ObjectId.isValid(showId) ? String(showId) : 'global_lock';
+
+        // Execute booking transaction exclusively inside single-threaded lock for this show slot
+        const result = await executeInShowLock(lockKey, async () => {
+            let verifiedTotal = totalAmount;
+
+            if (mongoose.Types.ObjectId.isValid(showId)) {
+                // 1. Double-booking conflict check across existing bookings
                 const existingConflict = await Booking.findOne({
                     showId,
                     selectedSeats: { $in: selectedSeats }
                 });
 
                 if (existingConflict) {
-                    return res.status(400).json({
-                        success: false,
-                        message: 'One or more of your selected seats are already booked! Please choose different seats.'
-                    });
+                    const conflictSeats = existingConflict.selectedSeats.filter(s => selectedSeats.includes(s));
+                    return {
+                        errorStatus: 400,
+                        errorMessage: `Seat reservation collision! Seat(s) [${conflictSeats.join(', ')}] have already been booked for this cinema showtime slot by another user.`
+                    };
                 }
 
-                const calculatedBase = selectedSeats.length * show.ticketPrice;
+                // 2. Atomic update on Show model: Ensure none of the selectedSeats exist in bookedSeats array
+                const updatedShow = await Show.findOneAndUpdate(
+                    {
+                        _id: showId,
+                        bookedSeats: { $nin: selectedSeats }
+                    },
+                    {
+                        $addToSet: { bookedSeats: { $each: selectedSeats } }
+                    },
+                    { new: true }
+                );
+
+                if (!updatedShow) {
+                    return {
+                        errorStatus: 400,
+                        errorMessage: 'One or more of your selected seats were just booked by another user! Please select different seats.'
+                    };
+                }
+
+                const calculatedBase = selectedSeats.length * updatedShow.ticketPrice;
                 const convenienceFee = selectedSeats.length * 25;
                 verifiedTotal = calculatedBase + convenienceFee;
             }
-        }
 
-        const customRef = 'MV-' + Math.floor(100000 + Math.random() * 900000);
-        const bookingPayload = {
-            bookingId: customRef,
-            userId,
-            showId: mongoose.Types.ObjectId.isValid(showId) ? showId : null,
-            selectedSeats,
-            totalAmount: verifiedTotal || 550,
-            bookingDate: new Date()
-        };
+            // 3. Create the unique booking record
+            const customRef = 'MV-' + Math.floor(100000 + Math.random() * 900000);
+            const bookingPayload = {
+                bookingId: customRef,
+                userId,
+                showId: mongoose.Types.ObjectId.isValid(showId) ? showId : null,
+                selectedSeats,
+                totalAmount: verifiedTotal || 550,
+                bookingDate: new Date()
+            };
 
-        const booking = await Booking.create(bookingPayload);
+            const booking = await Booking.create(bookingPayload);
 
-        let populatedBooking = booking;
-        if (mongoose.Types.ObjectId.isValid(showId)) {
-            populatedBooking = await Booking.findById(booking._id)
-                .populate({
-                    path: 'showId',
-                    populate: [
-                        { path: 'movieId', select: 'title poster language genre duration format' },
-                        { path: 'theatreId', select: 'theatreName city address' },
-                        { path: 'screenId', select: 'screenNumber' }
-                    ]
-                })
-                .populate('userId', 'name email');
+            let populatedBooking = booking;
+            if (mongoose.Types.ObjectId.isValid(showId)) {
+                populatedBooking = await Booking.findById(booking._id)
+                    .populate({
+                        path: 'showId',
+                        populate: [
+                            { path: 'movieId', select: 'title poster language genre duration format' },
+                            { path: 'theatreId', select: 'theatreName city address' },
+                            { path: 'screenId', select: 'screenNumber' }
+                        ]
+                    })
+                    .populate('userId', 'name email');
+            }
+
+            return {
+                success: true,
+                booking: populatedBooking || booking
+            };
+        });
+
+        if (result.errorStatus) {
+            return res.status(result.errorStatus).json({
+                success: false,
+                message: result.errorMessage
+            });
         }
 
         res.status(201).json({
             success: true,
-            message: 'Ticket booking confirmed and saved successfully!',
-            booking: populatedBooking || booking
+            message: 'Ticket booking confirmed and saved successfully with exclusive slot reservation!',
+            booking: result.booking
         });
     } catch (error) {
         next(error);
