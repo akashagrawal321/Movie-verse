@@ -113,16 +113,24 @@ const SeatBookingPage = () => {
                 navigate(`/booking-success/${newBookingId}`, { state: { booking: bookingData } });
             }
         } catch (error) {
-            // Simulate booking ID redirection for demo fallback
-            const demoBookingId = 'MV-' + Math.floor(100000 + Math.random() * 900000);
-            const fallbackBookingState = {
-                _id: demoBookingId,
-                bookingDate: new Date().toISOString(),
-                selectedSeats,
-                totalAmount: grandTotal,
-                showId: activeShow
-            };
-            navigate(`/booking-success/${demoBookingId}`, { state: { booking: fallbackBookingState } });
+            console.error('[SeatBooking Error]:', error);
+            const backendMsg = error.response?.data?.message;
+            if (backendMsg) {
+                setErrorMsg(`🚨 CONCURRENCY ALERT: ${backendMsg}`);
+                // Refresh booked seats list immediately to reflect newly locked seats
+                fetchShowAndBookedSeats();
+            } else {
+                // Fallback demo booking ID redirection if offline/demo
+                const demoBookingId = 'MV-' + Math.floor(100000 + Math.random() * 900000);
+                const fallbackBookingState = {
+                    _id: demoBookingId,
+                    bookingDate: new Date().toISOString(),
+                    selectedSeats,
+                    totalAmount: grandTotal,
+                    showId: activeShow
+                };
+                navigate(`/booking-success/${demoBookingId}`, { state: { booking: fallbackBookingState } });
+            }
         } finally {
             setBookingLoading(false);
         }

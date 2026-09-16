@@ -1,11 +1,12 @@
 /**
  * @file HomePage.jsx
- * @description BookMyShow-inspired Premium Homepage Page Component with Synchronized Recommended Movies
+ * @description BookMyShow-inspired Premium Homepage Page Component with Real-Time Booking Alert Banner
  */
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import BookingNotificationBanner from '../components/common/BookingNotificationBanner';
 import HeroBanner from '../components/home/HeroBanner';
 import LatestMovieAd from '../components/home/LatestMovieAd';
 import PartnershipAdSection from '../components/home/PartnershipAdSection';
@@ -56,6 +57,9 @@ const HomePage = () => {
 
     return (
         <div className="home-page-container">
+            {/* Real-Time Live Booking Notification Banner (Positioned directly above Hero section) */}
+            <BookingNotificationBanner />
+
             {/* Featured Banner Carousel */}
             <HeroBanner />
 

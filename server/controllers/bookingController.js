@@ -1,13 +1,6 @@
 /**
  * @file bookingController.js
- * @description Backend Booking Controller with Single-Threaded Mutex Concurrency Lock
- * 
- * INTERVIEW CONCEPTS COVERED:
- * 1. Single-Threaded Concurrency Control (Mutex Lock Queue):
- *    Ensures that for any given cinema showtime slot (`showId`), booking transactions execute strictly 
- *    one-at-a-time (sequentially). Eliminates race conditions and double-booking collisions.
- * 2. Atomic Database Operations:
- *    Uses MongoDB atomic `$addToSet` with `$nin` array collision detection to ensure seat reservation exclusivity.
+ * @description Backend Booking Controller with Single-Threaded Mutex Concurrency Lock & Live Activity Alerts
  */
 
 const mongoose = require('mongoose');
@@ -84,6 +77,44 @@ const getBookedSeatsByShow = async (req, res, next) => {
             success: true,
             showId,
             bookedSeats: [...new Set(bookedSeats)]
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
+ * @route   GET /api/bookings/recent-activity
+ * @desc    Fetch recent ticket booking transactions across all users for live alert banner
+ * @access  Public
+ */
+const getRecentBookingActivities = async (req, res, next) => {
+    try {
+        const bookings = await Booking.find()
+            .sort({ bookingDate: -1 })
+            .limit(5)
+            .populate({
+                path: 'showId',
+                populate: [
+                    { path: 'movieId', select: 'title poster genre' },
+                    { path: 'theatreId', select: 'theatreName city' }
+                ]
+            })
+            .populate('userId', 'name');
+
+        const activities = bookings.map(b => ({
+            _id: b._id,
+            userName: b.userId?.name ? b.userId.name.split(' ')[0] : 'Cinemagoer',
+            movieTitle: b.showId?.movieId?.title || 'Blockbuster Feature',
+            showTime: b.showId?.showTime || '07:30 PM',
+            theatreName: b.showId?.theatreId?.theatreName || 'PVR IMAX',
+            seatCount: b.selectedSeats ? b.selectedSeats.length : 2,
+            seats: b.selectedSeats || ['A1', 'A2']
+        }));
+
+        res.status(200).json({
+            success: true,
+            activities
         });
     } catch (error) {
         next(error);
@@ -284,6 +315,7 @@ const getUserBookings = async (req, res, next) => {
 
 module.exports = {
     getBookedSeatsByShow,
+    getRecentBookingActivities,
     createBooking,
     getBookingById,
     getUserBookings

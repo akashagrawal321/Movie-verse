@@ -7,6 +7,7 @@ const express = require('express');
 const router = express.Router();
 const {
     getBookedSeatsByShow,
+    getRecentBookingActivities,
     createBooking,
     getBookingById,
     getUserBookings
@@ -16,6 +17,9 @@ const { protect } = require('../middleware/authMiddleware');
 
 // Public route to fetch already booked seats for a showtime
 router.get('/show/:showId/booked-seats', getBookedSeatsByShow);
+
+// Public route to fetch recent booking activity events for live notification banner
+router.get('/recent-activity', getRecentBookingActivities);
 
 // Protected routes (Authentication Required)
 router.post('/', protect, createBooking);
